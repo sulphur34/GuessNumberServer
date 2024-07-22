@@ -1,4 +1,4 @@
-﻿namespace Entities
+﻿namespace Grains.Interfaces
 {
     [GenerateSerializer]
     public class PlayerState

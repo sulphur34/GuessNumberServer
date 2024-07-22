@@ -9,7 +9,6 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Grains.Interfaces\Grains.Interfaces.csproj" />
-      <ProjectReference Include="..\Entities\Entities.csproj" />
     </ItemGroup>
 
     <ItemGroup>

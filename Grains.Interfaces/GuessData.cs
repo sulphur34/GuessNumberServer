@@ -1,6 +1,4 @@
-﻿using Grains.Interfaces;
-
-namespace Entities
+﻿namespace Grains.Interfaces
 {
     [GenerateSerializer]
     public class GuessData

@@ -1,46 +1,47 @@
 ﻿using Grains.Interfaces;
 
-namespace Entities;
-
-public class WaitingQueueGrain : Grain, IWaitingQueueGrain
+namespace Entities
 {
-    private readonly Queue<IPlayerGrain> _joinedPlayers = new();
-
-    private IRoomGrain? _roomGrain;
-    private uint _playersAmount;
-
-    public Task Clear()
+    public class WaitingQueueGrain : Grain, IWaitingQueueGrain
     {
-        _joinedPlayers.Clear();
-        _roomGrain = null;
-        return Task.CompletedTask;
-    }
+        private readonly Queue<IPlayerGrain> _joinedPlayers = new();
 
-    public Task Configure(uint playersAmount)
-    {
-        _playersAmount = playersAmount;
-        return Task.CompletedTask;
-    }
+        private IRoomGrain? _roomGrain;
+        private uint _playersAmount;
 
-    public async Task<IRoomGrain> GetRoom()
-    {
-        if (_roomGrain == null)
+        public Task Clear()
         {
-            _roomGrain = GrainFactory.GetGrain<IRoomGrain>(Guid.NewGuid());
-            await _roomGrain.Configure(_playersAmount);
+            _joinedPlayers.Clear();
+            _roomGrain = null;
+            return Task.CompletedTask;
         }
 
-        return _roomGrain;
-    }
+        public Task Configure(uint playersAmount)
+        {
+            _playersAmount = playersAmount;
+            return Task.CompletedTask;
+        }
 
-    public Task<bool> IsQueueFull()
-    {
-        return Task.FromResult(_joinedPlayers.Count >= _playersAmount);
-    }
+        public async Task<IRoomGrain> GetRoom()
+        {
+            if (_roomGrain == null)
+            {
+                _roomGrain = GrainFactory.GetGrain<IRoomGrain>(Guid.NewGuid());
+                await _roomGrain.Configure(_playersAmount);
+            }
 
-    public Task JoinQueue(IPlayerGrain player)
-    {
-        _joinedPlayers.Enqueue(player);
-        return Task.CompletedTask;
+            return _roomGrain;
+        }
+
+        public Task<bool> IsQueueFull()
+        {
+            return Task.FromResult(_joinedPlayers.Count >= _playersAmount);
+        }
+
+        public Task JoinQueue(IPlayerGrain player)
+        {
+            _joinedPlayers.Enqueue(player);
+            return Task.CompletedTask;
+        }
     }
 }
